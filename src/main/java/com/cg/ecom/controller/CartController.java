@@ -1,12 +1,16 @@
 package com.cg.ecom.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,46 +32,45 @@ public class CartController {
 	@Autowired
 	public CartService cartService;
 
-	@PostMapping("/addCart")
-	public ResponseEntity<CartDTO> addToCart(@Valid @RequestBody AddCartDTO addCartDTO){
-
-	    CartDTO cartsave = cartService.addToCart(addCartDTO);
-	    return ResponseEntity.ok(cartsave);
-	}
-
-
 	@PutMapping("/updateCart")
-	public ResponseEntity<CartDTO> updateCart(@RequestBody CartDTO cartDTO) {
-		return new ResponseEntity<CartDTO>(cartService.updateCart(cartDTO), HttpStatus.ACCEPTED);
+	public ResponseEntity<?> updateCart(@Valid @RequestBody CartDTO cartDTO, BindingResult result) {
+	    if (result.hasErrors()) {
+	        Map<String, String> errors = new HashMap<>();
+	        for (FieldError error : result.getFieldErrors()) {
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	        return ResponseEntity.badRequest().body(errors);
+	    }
 
+	    CartDTO updatedCart = cartService.updateCart(cartDTO);
+	    return ResponseEntity.ok(updatedCart);
 	}
 
 	@GetMapping("/getCartById/{id}")
-	public ResponseEntity<CartDTO> getCartById(@PathVariable int id) {
-		CartDTO cartDTO = cartService.getById(id);
-		if (cartDTO != null) {
-			return new ResponseEntity<CartDTO>(cartDTO, HttpStatus.OK);
-		}
-		throw new ItemNotAvailableException("Cart with id " + id + " doesn't exist");
+	public ResponseEntity<?> getCartById(@PathVariable int id) {
+	    CartDTO cartDTO = cartService.getById(id);
+	    if (cartDTO != null) {
+	        return ResponseEntity.ok(cartDTO);
+	    }
+	    throw new ItemNotAvailableException("Cart with id " + id + " doesn't exist");
 	}
 
-	
 	@DeleteMapping("/deleteCartById/{id}")
-	public ResponseEntity<Boolean> deleteCartById(@PathVariable int id) {
-		CartDTO cartDTO = cartService.getById(id);
-		if (cartDTO != null) {
-			cartService.deleteCart(cartDTO);
-			return new ResponseEntity<Boolean>(true, HttpStatus.ACCEPTED);
-		}
-		throw new ItemNotAvailableException("Cart with id " + id + "doesnot exists");
+	public ResponseEntity<?> deleteCartById(@PathVariable int id) {
+	    CartDTO cartDTO = cartService.getById(id);
+	    if (cartDTO != null) {
+	        cartService.deleteCart(cartDTO);
+	        return ResponseEntity.ok(true);
+	    }
+	    throw new ItemNotAvailableException("Cart with id " + id + " doesn't exist");
 	}
 
 	@GetMapping("/fetchAllinCart")
 	public ResponseEntity<List<CartDTO>> getAll() {
-		List<CartDTO> list = cartService.findAll();
-		return ResponseEntity.ok(list);
+	    List<CartDTO> list = cartService.findAll();
+	    return ResponseEntity.ok(list);
 	}
-	
+
 
 	
 }

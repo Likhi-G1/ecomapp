@@ -1,10 +1,16 @@
 package com.cg.ecom.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,42 +60,57 @@ return ResponseEntity.ok(list);
 }
 //////////////
 	
-	@PostMapping("/addProductSuppliers")
-	public ResponseEntity<ProductSupplierDTO> addProductSupplier(@RequestBody AddProductSupplierDTO addProductSupplierDTO)
-	{
+@PostMapping("/addProductSuppliers")
+public ResponseEntity<?> addProductSuppliers(@Valid @RequestBody AddProductSupplierDTO addProductSupplierDTO, BindingResult result) {
+    if (result.hasErrors()) {
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : result.getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        return ResponseEntity.badRequest().body(errors);
+    }
 
-		ProductSupplierDTO productSuppliers = productSupplierService.addProductSupplier(addProductSupplierDTO);
-		return ResponseEntity.ok(productSuppliers);
+    ProductSupplierDTO addedProductSupplier = productSupplierService.addProductSupplier(addProductSupplierDTO);
+    return ResponseEntity.ok(addedProductSupplier);
+}
 
-	}
-	
+@GetMapping("/fetchProductSuppliersById/{id}")
+public ResponseEntity<?> getProductSupplierById(@PathVariable int id) {
+    ProductSupplierDTO productSupplierDTO = productSupplierService.getById(id);
+    if (productSupplierDTO != null) {
+        return ResponseEntity.ok(productSupplierDTO);
+    }
+    throw new ProductSupplierNotAvailableException("ProductSupplier with id " + id + " does not exist");
+}
 
-	@GetMapping("/fetchProductSuppliersById/{id}")
-	public ResponseEntity<ProductSupplierDTO> getProductSupplierById(@PathVariable int id) {
-		ProductSupplierDTO productSupplierDTO = productSupplierService.getById(id);
-		return new ResponseEntity<ProductSupplierDTO>(productSupplierDTO, HttpStatus.FOUND);
-	}
+@PutMapping("/updateProductSuppliers")
+public ResponseEntity<?> updateProductSupplier(@Valid @RequestBody ProductSupplierDTO productSupplierDTO, BindingResult result) {
+    if (result.hasErrors()) {
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : result.getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        return ResponseEntity.badRequest().body(errors);
+    }
 
-	@PutMapping("/updateProductSuppliers")
-	public ResponseEntity<ProductSupplierDTO> updateProductSupplier(@RequestBody ProductSupplierDTO productSupplierDTO) {
-		return new ResponseEntity<ProductSupplierDTO>(productSupplierService.updateProductSupplier(productSupplierDTO),
-				HttpStatus.ACCEPTED);
+    ProductSupplierDTO updatedProductSupplier = productSupplierService.updateProductSupplier(productSupplierDTO);
+    return ResponseEntity.ok(updatedProductSupplier);
+}
 
-	}
+@DeleteMapping("/deleteProductSuppliers/{id}")
+public ResponseEntity<?> deleteProductSupplierById(@PathVariable int id) {
+    ProductSupplierDTO productSupplierDTO = productSupplierService.getById(id);
+    if (productSupplierDTO != null) {
+        productSupplierService.deleteProductSupplier(productSupplierDTO);
+        return ResponseEntity.ok(true);
+    }
+    throw new ProductSupplierNotAvailableException("ProductSupplier with id " + id + " does not exist");
+}
 
-	@DeleteMapping("/deleteProductSuppliers/{id}")
-	public ResponseEntity<Boolean> deleteProductSupplierById(@PathVariable int id) {
-		ProductSupplierDTO productSupplierDTO = productSupplierService.getById(id);
-		if (productSupplierDTO != null) {
-			productSupplierService.deleteProductSupplier(productSupplierDTO);
-			return new ResponseEntity<Boolean>(true, HttpStatus.ACCEPTED);
-		}
-		throw new ProductSupplierNotAvailableException("ProductSuppliers with id " + id + "doesnot exists");
-	}
+@GetMapping("/fetchAllProductSuppliers")
+public ResponseEntity<List<ProductSupplierDTO>> getAllProductSuppliers() {
+    List<ProductSupplierDTO> list = productSupplierService.findAll();
+    return ResponseEntity.ok(list);
+}
 
-	@GetMapping("/fetchAllProductSuppliers")
-	public ResponseEntity<List<ProductSupplierDTO>> getAllProductSuppliers() {
-		List<ProductSupplierDTO> list = productSupplierService.findAll();
-		return ResponseEntity.ok(list);
-	}
 }

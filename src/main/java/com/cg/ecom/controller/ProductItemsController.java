@@ -1,10 +1,16 @@
 package com.cg.ecom.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,44 +32,57 @@ public class ProductItemsController {
 	@Autowired
 	public ProductItemsService productItemsService;
 	
-	@PostMapping("/addproductitems")
-	public ResponseEntity<ProductItemsDTO> addProductItems(@RequestBody AddProductItemsDTO addProductItemsDTO){
-		
-			ProductItemsDTO productitems = productItemsService.addProductItems(addProductItemsDTO);
-			return ResponseEntity.ok(productitems);
-		
+	@PostMapping("/addProductItems")
+	public ResponseEntity<?> addProductItems(@Valid @RequestBody AddProductItemsDTO addProductItemsDTO, BindingResult result) {
+	    if (result.hasErrors()) {
+	        Map<String, String> errors = new HashMap<>();
+	        for (FieldError error : result.getFieldErrors()) {
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	        return ResponseEntity.badRequest().body(errors);
+	    }
+
+	    ProductItemsDTO addedProductItems = productItemsService.addProductItems(addProductItemsDTO);
+	    return ResponseEntity.ok(addedProductItems);
 	}
 
 	@GetMapping("/productItemsById/{id}")
-	public ResponseEntity<ProductItemsDTO> getProductItemsById(@PathVariable int id)
-	{
-		if(productItemsService.getById(id)!=null) {
-		ProductItemsDTO productItemsDTO=productItemsService.getById(id);
-		return new ResponseEntity<ProductItemsDTO>(productItemsDTO, HttpStatus.FOUND);
-		}
-		throw new ItemNotAvailableException();
+	public ResponseEntity<?> getProductItemsById(@PathVariable int id) {
+	    ProductItemsDTO productItemsDTO = productItemsService.getById(id);
+	    if (productItemsDTO != null) {
+	        return ResponseEntity.ok(productItemsDTO);
+	    }
+	    throw new ItemNotAvailableException("Product items with id " + id + " does not exist");
 	}
-	
+
 	@PutMapping("/updateProductItems")
-	public ResponseEntity<ProductItemsDTO> updateProductItems(@RequestBody ProductItemsDTO productItemsDTO){
-		return new ResponseEntity<ProductItemsDTO>(productItemsService.updateProductItems(productItemsDTO), HttpStatus.ACCEPTED);
-		
+	public ResponseEntity<?> updateProductItems(@Valid @RequestBody ProductItemsDTO productItemsDTO, BindingResult result) {
+	    if (result.hasErrors()) {
+	        Map<String, String> errors = new HashMap<>();
+	        for (FieldError error : result.getFieldErrors()) {
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	        return ResponseEntity.badRequest().body(errors);
+	    }
+
+	    ProductItemsDTO updatedProductItems = productItemsService.updateProductItems(productItemsDTO);
+	    return ResponseEntity.ok(updatedProductItems);
 	}
-	
+
 	@DeleteMapping("/deleteProductItems/{id}")
-	public ResponseEntity<Boolean> deleteProductItemsById(@PathVariable int id)
-	{
-		ProductItemsDTO productItemsDTO=productItemsService.getById(id);
-		if(productItemsDTO!=null) {
-			productItemsService.deleteProductItems(productItemsDTO);
-			return new ResponseEntity<Boolean>(true, HttpStatus.ACCEPTED);
-		}
-		throw new ItemNotAvailableException("Items with id " +id+ "doesnot exists");
+	public ResponseEntity<?> deleteProductItemsById(@PathVariable int id) {
+	    ProductItemsDTO productItemsDTO = productItemsService.getById(id);
+	    if (productItemsDTO != null) {
+	        productItemsService.deleteProductItems(productItemsDTO);
+	        return ResponseEntity.ok(true);
+	    }
+	    throw new ItemNotAvailableException("Items with id " + id + " does not exist");
 	}
-	
-	@GetMapping("/fetchAllproductItems")
-	public ResponseEntity<List<ProductItemsDTO>> getAllProductItems(){
-		List<ProductItemsDTO> list=productItemsService.findAll();
-		return ResponseEntity.ok(list);
+
+	@GetMapping("/fetchAllProductItems")
+	public ResponseEntity<List<ProductItemsDTO>> getAllProductItems() {
+	    List<ProductItemsDTO> list = productItemsService.findAll();
+	    return ResponseEntity.ok(list);
 	}
+
 }

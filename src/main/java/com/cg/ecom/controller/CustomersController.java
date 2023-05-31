@@ -49,21 +49,29 @@ public class CustomersController {
 	
 	
 	@PutMapping("/updateCustomers")
-	public ResponseEntity<CustomersDTO> updateCustomers(@RequestBody CustomersDTO customersDTO) 
-	{
-		return new ResponseEntity<CustomersDTO>(customersService.updateCustomers(customersDTO), HttpStatus.ACCEPTED);
+	public ResponseEntity<?> updateCustomers(@Valid @RequestBody CustomersDTO customersDTO, BindingResult result) {
+	    if (result.hasErrors()) {
+	        Map<String, String> errors = new HashMap<>();
+	        for (FieldError error : result.getFieldErrors()) {
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	        return ResponseEntity.badRequest().body(errors);
+	    }
 
+	    CustomersDTO updatedCustomer = customersService.updateCustomers(customersDTO);
+	    return ResponseEntity.ok(updatedCustomer);
 	}
 
 	@DeleteMapping("/deleteCustomers/{id}")
-	public ResponseEntity<Boolean> deleteCustomersById(@PathVariable int id) {
-		CustomersDTO customersDTO = customersService.getById(id);
-		if (customersDTO != null) {
-			customersService.deleteCustomers(customersDTO);
-			return new ResponseEntity<Boolean>(true, HttpStatus.ACCEPTED);
-		}
-		throw new ItemNotAvailableException("Customers with id " + id + "doesnot exists");
+	public ResponseEntity<?> deleteCustomersById(@PathVariable int id) {
+	    CustomersDTO customersDTO = customersService.getById(id);
+	    if (customersDTO != null) {
+	        customersService.deleteCustomers(customersDTO);
+	        return ResponseEntity.ok(true);
+	    }
+	    throw new ItemNotAvailableException("Customers with id " + id + " does not exist");
 	}
+
 ///////////////
 	
 	
