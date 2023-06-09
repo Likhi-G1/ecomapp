@@ -22,7 +22,7 @@ pipeline {
     stage('Deploy') {
       environment {
         // Set environment variables for deployment
-        DOCKER_HOST = 'tcp://<AWS_DOCKER_HOST>:2375'
+        DOCKER_HOST='tcp://172.31.90.222:2375'
         DOCKER_IMAGE = 'springbootecommerceapplication_app:latest'
         CONTAINER_NAME = 'SpringBootEcommerceApplication'
        // POSTGRES_CONTAINER_NAME = 'PostgreSQLContainer'
