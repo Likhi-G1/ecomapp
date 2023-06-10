@@ -22,7 +22,7 @@ pipeline {
     stage('Deploy') {
       environment {
         // Set environment variables for deployment
-        DOCKER_HOST='tcp://172.31.92.169:2375'
+        DOCKER_HOST='tcp://172.31.93.144:2375'
         CONTAINER_NAME = 'ecomapp'
       }
       steps {
