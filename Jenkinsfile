@@ -28,8 +28,8 @@ pipeline {
       }
       steps {
         // Stop and remove the existing application container if it exists
-        sh 'docker stop springbootecommerceapplication_app || true'
-        sh 'docker rm springbootecommerceapplication_app || true'
+       // sh 'docker stop springbootecommerceapplication_app || true'
+       // sh 'docker rm springbootecommerceapplication_app || true'
         
         // Stop and remove all running containers
         sh 'docker-compose down'
