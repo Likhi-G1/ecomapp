@@ -27,21 +27,23 @@ pipeline {
         //CONTAINER_NAME = 'SpringBootEcommerceApplication'
       }
       steps {
-        // Stop and remove the existing application container if it exists
-       // sh 'docker stop springbootecommerceapplication_app || true'
-       // sh 'docker rm springbootecommerceapplication_app || true'
+         // Stop and remove all running containers
+       sh 'docker-compose down'
         
-        // Stop and remove all running containers
-       // sh 'docker-compose down'
+        // Stop and remove the existing application container if it exists
+       sh 'docker stop EcomApp || true'
+       sh 'docker rm EcomApp || true'
+        
+       
         
         // Delete all containers
-       // sh 'docker rm $(docker ps -aq)'
+        // sh 'docker rm $(docker ps -aq)'
         
         // Delete all images
-        //sh 'docker rmi $(docker images -q)'
+         sh 'docker rmi $(docker images -q)'
         
         // Build a new Docker image for your Spring Boot application
-        //sh 'docker build -t springbootecommerceapplication_app . -f Dockerfile'
+        sh 'docker build -t EcomApp . -f Dockerfile'
         
         // Run the new application container
         //sh 'docker run -d --name springbootecommerceapplication_app -p 9090:9090 springbootecommerceapplication_app'
