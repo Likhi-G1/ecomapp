@@ -32,13 +32,13 @@ pipeline {
        // sh 'docker rm springbootecommerceapplication_app || true'
         
         // Stop and remove all running containers
-        sh 'docker-compose down'
+       // sh 'docker-compose down'
         
         // Delete all containers
-        sh 'docker rm $(docker ps -aq)'
+       // sh 'docker rm $(docker ps -aq)'
         
         // Delete all images
-        sh 'docker rmi $(docker images -q)'
+        //sh 'docker rmi $(docker images -q)'
         
         // Build a new Docker image for your Spring Boot application
         //sh 'docker build -t springbootecommerceapplication_app . -f Dockerfile'
