@@ -1,3 +1,4 @@
 * June 12
-#Build v1.0
-#Build v1.1
+#Build v1.0 status: pass
+#Build v1.1 status:fail
+#Build v2.0 status:pending
