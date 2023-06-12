@@ -33,9 +33,6 @@ pipeline {
         // Delete the EcomApp image if it exists
         sh 'docker rmi ${CONTAINER_NAME} || true'
 
-        // Build a new Docker image for your Spring Boot application
-        //sh 'docker build -t ${CONTAINER_NAME} . -f Dockerfile'
-
         // Start the build process using docker-compose
         sh 'docker-compose up -d'
       }
