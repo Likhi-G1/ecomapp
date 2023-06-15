@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
         - name: postgresql
-          image: haneeshdevops/posgres:latest
+          image: haneeshdevops/postgres:latest
           env:
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_PASSWORD
               value: "9963"
             - name: POSTGRES_DB
-              value: DATA_BASE_NAME
+              value: DATABASE_NAME
           ports:
             - containerPort: 5432
