@@ -6,8 +6,8 @@ services:
    restart: always
    environment:
      POSTGRES_USER: postgres
-     POSTGRES_PASSWORD: root
-     POSTGRES_DB: TEST2
+     POSTGRES_PASSWORD: 9963
+     POSTGRES_DB: QUANTUM
    volumes:
      - postgres-data:/var/lib/postgresql/data
  app:
@@ -16,10 +16,10 @@ services:
    depends_on:
      - postgres
    environment:
-     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/TEST2
+     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/QUANTUM
      SPRING_DATASOURCE_USERNAME: postgres
-     SPRING_DATASOURCE_PASSWORD: root
+     SPRING_DATASOURCE_PASSWORD: 9963
    ports:
-     - "9090:9090"
+     - "8084:9090"
 volumes:
  postgres-data:
