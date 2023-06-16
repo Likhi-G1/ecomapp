@@ -20,6 +20,6 @@ services:
      SPRING_DATASOURCE_USERNAME: postgres
      SPRING_DATASOURCE_PASSWORD: 9963
    ports:
-     - "8084:9090"
+     - "8084:8084"
 volumes:
  postgres-data:
