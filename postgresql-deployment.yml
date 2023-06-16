@@ -21,6 +21,6 @@ spec:
             - name: POSTGRES_PASSWORD
               value: "9963"
             - name: POSTGRES_DB
-              value: DATABASE_NAME
+              value: QUANTUM
           ports:
             - containerPort: 5432
