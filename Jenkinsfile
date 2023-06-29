@@ -5,7 +5,7 @@ pipeline {
     stage('Build') {
       steps {
         // Checkout your source code from GitHub
-        git 'https://github.com/Haneesh55/SpringBootEcommerceApplication.git'
+        git 'https://github.com/HaneeshDevops/SpringBootEcommerceApplication.git'
 
         // Build your Spring Boot application
         sh 'mvn clean install'
