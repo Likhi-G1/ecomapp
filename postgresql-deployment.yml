@@ -19,7 +19,7 @@ spec:
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_PASSWORD
-              value: "12345678"
+              value: "9963"
             - name: POSTGRES_DB
               value: QUANTUM
           ports:
