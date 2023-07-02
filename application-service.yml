@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: javapp
 spec:
+  type: LoadBalancer
+  ports:
+    - port: 8084
+      targetPort: 8084
   selector:
     app: javapp
-  ports:
-    - name: http
-      port: 8084
-      targetPort: 8084
