@@ -15,10 +15,5 @@ spec:
       containers:
         - name: javapp
           image: haneeshdevops/springbootecommerceapplication_app:latest
-          env:
-            - name: DB_HOST
-              value: postgresql
-            - name: DB_PORT
-              value: "5432"
           ports:
             - containerPort: 8084
