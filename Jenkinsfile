@@ -22,7 +22,7 @@ pipeline {
     stage('Docker Build and Push') {
       steps {
         // Build the Docker image
-        sh 'docker build -t haneeshdevops/ecomapp:latest .'
+        sh 'docker build --no-cache -t haneeshdevops/ecomapp:latest .'
 
         // Push the Docker image to Docker Hub
         sh 'docker login -u haneeshdevops -p intMega@95422'
