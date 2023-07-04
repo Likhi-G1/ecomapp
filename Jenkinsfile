@@ -45,7 +45,7 @@ pipeline {
           sh 'kubectl apply -f application-service.yml'
 
           // Restart the deployment to apply the changes
-          sh 'kubectl rollout restart deployment ecomapp-deployment'
+          sh 'kubectl rollout restart deployment javapp'
 
           // Create a service to expose the application
           // sh 'kubectl expose deployment/${CONTAINER_NAME} --port=8084 --target-port=8084 --type=LoadBalancer --name=${CONTAINER_NAME}'
