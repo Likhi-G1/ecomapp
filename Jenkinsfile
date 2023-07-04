@@ -33,11 +33,11 @@ pipeline {
     stage('Deploy') {
       environment {
         CONTAINER_NAME = 'ecomapp'
-        KUBECONFIG = credentials('k8sgroup')
+        
       }
       steps {
         // Set up Kubernetes context using kubeconfig
-        withKubeConfig([credentialsId: 'k8sgroup', contextName: 'KUBECONFIG']) {
+        withKubeConfig([credentialsId: 'k8sgroup']) {
           // Deploy the application to Kubernetes using the deployment YAML file
           sh 'kubectl apply -f application-deployment.yml'
 
