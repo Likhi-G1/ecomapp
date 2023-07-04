@@ -37,7 +37,7 @@ pipeline {
       }
       steps {
         // Set up Kubernetes context using kubeconfig
-        withKubeConfig([credentialsId: 'k8sgroup', kubeconfigFileVariable: 'KUBECONFIG']) {
+        withKubeConfig([credentialsId: 'k8sgroup', contextName: 'KUBECONFIG']) {
           // Deploy the application to Kubernetes using the deployment YAML file
           sh 'kubectl apply -f application-deployment.yml'
 
