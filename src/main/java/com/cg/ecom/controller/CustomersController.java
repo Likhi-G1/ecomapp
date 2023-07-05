@@ -32,7 +32,7 @@ public class CustomersController {
 
 	
 
-	@PostMapping("/addCustomerk8s2")
+	@PostMapping("/addCustomerlikhitha")
 	public ResponseEntity<?> addCustomersnew(@Valid @RequestBody AddCustomersDTO customers, BindingResult result) {
 	    if (result.hasErrors()) {
 	        Map<String, String> errors = new HashMap<>();
