@@ -31,6 +31,22 @@ public class CartController {
 
 	@Autowired
 	public CartService cartService;
+	
+	@PostMapping("/addToCart")
+    public ResponseEntity<?> addToCart(@Valid @RequestBody AddCartDTO addCartDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+ 
+
+        CartDTO cartDTO = cartService.addToCart(addCartDTO);
+        return ResponseEntity.ok(cartDTO);
+    }
 
 	@PutMapping("/updateCart")
 	public ResponseEntity<?> updateCart(@Valid @RequestBody CartDTO cartDTO, BindingResult result) {
