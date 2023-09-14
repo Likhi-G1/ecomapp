@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'your-agent-label' // Specify the label of the Jenkins agent you want to use
-    }
+    agent any 
     stages {
         stage('Build') {
             steps {
